@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import dbConnect from "../../../../lib/dbConnect";
@@ -6,7 +6,7 @@ import User from "../../../../models/User";
 
 const JWT_SECRET = process.env.JWT_SECRET || "supersecret";
 
-export async function POST(req: NextRequest) {
+export async function POST(req) {
   try {
     await dbConnect();
     const { email, password } = await req.json();
