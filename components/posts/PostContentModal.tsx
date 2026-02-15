@@ -16,6 +16,37 @@ const PostContentModal: React.FC<PostContentModalProps> = ({
   const { user } = useAuth();
 
   const [content, setContent] = useState("");
+//added..
+ const handlePost = async () => {
+  if (!content.trim()) return;
+
+  try {
+    const token = localStorage.getItem("token");
+
+    const formData = new FormData();
+    formData.append("text", content);
+
+    const res = await fetch("/api/posts", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      body: formData,
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) throw new Error(data.message);
+
+    setContent("");
+    onClose();
+    window.location.reload();
+  } catch (err) {
+    console.error("Post failed:", err);
+  }
+};
+
+//....
 
   if (!isOpen) return null;
 
@@ -98,10 +129,11 @@ const PostContentModal: React.FC<PostContentModalProps> = ({
           </div>
 
           <button
+            onClick={handlePost}
             className="
               bg-orange-500
               hover:bg-orange-600
-              text-white
+              text-whiteA
               px-4 py-2
               rounded-lg
               font-medium
@@ -109,6 +141,9 @@ const PostContentModal: React.FC<PostContentModalProps> = ({
           >
             Post
           </button>
+
+
+   
         </div>
       </div>
     </div>
