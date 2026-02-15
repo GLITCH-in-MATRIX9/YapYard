@@ -10,36 +10,13 @@ export const metadata = {
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="en" className="overflow-hidden">
-      <body
-        className="
-          bg-gray-50 dark:bg-[#0a0a0a]
-          h-screen
-          w-screen
-          overflow-hidden
-        "
-      >
-
+    <html lang="en">
+      <body className="bg-gray-50 dark:bg-[#0a0a0a]">
         <AuthProvider>
-
           <ClientWrapper>
-
-            {/* MAIN APP VIEWPORT */}
-            <main
-              className="
-                w-full
-                h-full
-                overflow-hidden
-                relative
-              "
-            >
-              {children}
-            </main>
-
+            {children}
           </ClientWrapper>
-
         </AuthProvider>
-
       </body>
     </html>
   );

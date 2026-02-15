@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import { useRouter, usePathname } from "next/navigation";
 import {
   Home,
   Hash,
@@ -10,7 +11,6 @@ import {
   Menu,
   PanelLeftClose,
   PanelLeftOpen,
-  User,
 } from "lucide-react";
 
 /* =========================
@@ -21,9 +21,9 @@ const menuSections = [
   {
     title: "MAIN MENU",
     links: [
-      { name: "Home Page", icon: Home, isActive: true },
-      { name: "Trending Topics", icon: Hash },
-      { name: "Popular Creator", icon: Heart },
+      { name: "Home Page", icon: Home, path: "/" },
+      { name: "Trending Topics", icon: Hash, path: "/trending" },
+      { name: "Popular Creator", icon: Heart, path: "/creators" },
     ],
     defaultOpen: true,
   },
@@ -44,8 +44,9 @@ const contacts = [
    MENU ITEM
 ========================= */
 
-const MenuItem = ({ icon: Icon, name, isActive = false, collapsed }: any) => (
+const MenuItem = ({ icon: Icon, name, isActive = false, collapsed, onClick }: any) => (
   <div
+    onClick={onClick}
     className={`
       flex items-center
       ${collapsed ? "justify-center" : ""}
@@ -78,6 +79,7 @@ const ContactItem = ({ contact, collapsed }: any) => (
     <div className="relative">
       <img
         src={contact.img}
+        alt={contact.name}
         className="w-8 h-8 rounded-full object-cover"
       />
 
@@ -96,7 +98,7 @@ const ContactItem = ({ contact, collapsed }: any) => (
    MENU SECTION
 ========================= */
 
-const MenuSection = ({ section, collapsed }: any) => {
+const MenuSection = ({ section, collapsed, currentPath, onNavigate }: any) => {
   const [isOpen, setIsOpen] = useState(section.defaultOpen ?? true);
 
   return (
@@ -113,7 +115,14 @@ const MenuSection = ({ section, collapsed }: any) => {
 
       {(isOpen || collapsed) &&
         section.links.map((link: any) => (
-          <MenuItem key={link.name} {...link} collapsed={collapsed} />
+          <MenuItem
+            key={link.name}
+            icon={link.icon}
+            name={link.name}
+            isActive={currentPath === link.path}
+            collapsed={collapsed}
+            onClick={() => onNavigate(link.path)}
+          />
         ))}
     </div>
   );
@@ -124,8 +133,15 @@ const MenuSection = ({ section, collapsed }: any) => {
 ========================= */
 
 const Sidebar = () => {
+  const router = useRouter();
+  const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const [collapsed, setCollapsed] = useState(false);
+
+  const handleNavigation = (path: string) => {
+    router.push(path);
+    setOpen(false); // Close mobile menu after navigation
+  };
 
   return (
     <>
@@ -136,6 +152,14 @@ const Sidebar = () => {
       >
         <Menu className="text-white w-6 h-6" />
       </button>
+
+      {/* OVERLAY for mobile */}
+      {open && (
+        <div
+          className="fixed inset-0 bg-black/50 z-[9998] md:hidden"
+          onClick={() => setOpen(false)}
+        />
+      )}
 
       <aside
         className={`
@@ -171,6 +195,8 @@ const Sidebar = () => {
                 key={section.title}
                 section={section}
                 collapsed={collapsed}
+                currentPath={pathname}
+                onNavigate={handleNavigation}
               />
             ))}
 
