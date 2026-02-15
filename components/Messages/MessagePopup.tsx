@@ -53,7 +53,8 @@ export default function MessagePopup({ otherUser, currentUserId, onClose }: Mess
 
   const fetchMessages = async () => {
     try {
-      const token = localStorage.getItem('token');
+      const token = user?.token;
+
       const response = await fetch(`/api/messages?userId=${otherUser._id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -75,7 +76,8 @@ export default function MessagePopup({ otherUser, currentUserId, onClose }: Mess
 
     setLoading(true);
     try {
-      const token = localStorage.getItem('token');
+      const token = user?.token;
+
       const response = await fetch('/api/messages', {
         method: 'POST',
         headers: {
