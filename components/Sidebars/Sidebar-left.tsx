@@ -41,10 +41,44 @@ const contacts = [
 ];
 
 /* =========================
+   TYPES (IMPORTANT FOR TS BUILD)
+========================= */
+
+interface MenuItemProps {
+  icon: any;
+  name: string;
+  isActive?: boolean;
+  collapsed: boolean;
+  onClick: () => void;
+}
+
+interface ContactItemProps {
+  contact: {
+    name: string;
+    img: string;
+    online: boolean;
+  };
+  collapsed: boolean;
+}
+
+interface MenuSectionProps {
+  section: any;
+  collapsed: boolean;
+  currentPath: string;
+  onNavigate: (path: string) => void;
+}
+
+/* =========================
    MENU ITEM
 ========================= */
 
-const MenuItem = ({ icon: Icon, name, isActive = false, collapsed, onClick }: any) => (
+const MenuItem = ({
+  icon: Icon,
+  name,
+  isActive = false,
+  collapsed,
+  onClick,
+}: MenuItemProps) => (
   <div
     onClick={onClick}
     className={`
@@ -67,7 +101,7 @@ const MenuItem = ({ icon: Icon, name, isActive = false, collapsed, onClick }: an
    CONTACT ITEM
 ========================= */
 
-const ContactItem = ({ contact, collapsed }: any) => (
+const ContactItem = ({ contact, collapsed }: ContactItemProps) => (
   <div
     className={`
       flex items-center gap-3
@@ -98,7 +132,12 @@ const ContactItem = ({ contact, collapsed }: any) => (
    MENU SECTION
 ========================= */
 
-const MenuSection = ({ section, collapsed, currentPath, onNavigate }: any) => {
+const MenuSection = ({
+  section,
+  collapsed,
+  currentPath,
+  onNavigate,
+}: MenuSectionProps) => {
   const [isOpen, setIsOpen] = useState(section.defaultOpen ?? true);
 
   return (
@@ -129,18 +168,19 @@ const MenuSection = ({ section, collapsed, currentPath, onNavigate }: any) => {
 };
 
 /* =========================
-   SIDEBAR
+   SIDEBAR (FIXED)
 ========================= */
 
 const Sidebar = () => {
   const router = useRouter();
   const pathname = usePathname();
+
   const [open, setOpen] = useState(false);
   const [collapsed, setCollapsed] = useState(false);
 
   const handleNavigation = (path: string) => {
     router.push(path);
-    setOpen(false); // Close mobile menu after navigation
+    setOpen(false);
   };
 
   return (
@@ -153,7 +193,7 @@ const Sidebar = () => {
         <Menu className="text-white w-6 h-6" />
       </button>
 
-      {/* OVERLAY for mobile */}
+      {/* OVERLAY */}
       {open && (
         <div
           className="fixed inset-0 bg-black/50 z-[9998] md:hidden"
@@ -171,25 +211,23 @@ const Sidebar = () => {
         md:translate-x-0 md:static
       `}
       >
-        {/* Background */}
         <div className="absolute inset-0 backdrop-blur-xl border-r border-white/5 bg-gradient-to-b from-black/70 via-[#0c0c0c]/90 to-[#0a0a0a]" />
 
-        {/* Orange glow */}
         <div className="absolute bottom-[-200px] left-1/2 -translate-x-1/2 w-[400px] h-[400px] bg-orange-500/20 blur-[140px]" />
 
         <div className="relative flex flex-col h-full text-white">
-
-          {/* Collapse Button */}
           <button
             onClick={() => setCollapsed(!collapsed)}
             className="mb-6 p-2 hover:bg-white/10 rounded-lg self-end"
           >
-            {collapsed ? <PanelLeftOpen size={18} /> : <PanelLeftClose size={18} />}
+            {collapsed ? (
+              <PanelLeftOpen size={18} />
+            ) : (
+              <PanelLeftClose size={18} />
+            )}
           </button>
 
-          {/* MAIN MENU */}
           <div className="flex-grow overflow-y-auto pr-1">
-
             {menuSections.map((section) => (
               <MenuSection
                 key={section.title}
@@ -200,7 +238,6 @@ const Sidebar = () => {
               />
             ))}
 
-            {/* MY CONTACTS */}
             <div className="mt-6">
               {!collapsed && (
                 <p className="text-xs text-gray-500 uppercase mb-3">
@@ -218,7 +255,6 @@ const Sidebar = () => {
                 ))}
               </div>
             </div>
-
           </div>
         </div>
       </aside>

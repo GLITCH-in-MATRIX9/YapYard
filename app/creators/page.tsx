@@ -6,6 +6,7 @@ import SidebarLeft from "@/components/Sidebars/Sidebar-left";
 import Hero from "@/components/creators/Hero";
 import Filters from "@/components/creators/Filters";
 import CreatorGrid from "@/components/creators/CreatorGrid";
+import Sidebar from "@/components/Sidebars/Sidebar-left";
 
 export default function CreatorsPage() {
 
@@ -22,7 +23,7 @@ export default function CreatorsPage() {
 
         {/* SIDEBAR */}
         <div className="hidden md:block sticky top-16 h-[calc(100vh-4rem)]">
-          <SidebarLeft collapsed={collapsed} setCollapsed={setCollapsed} />
+          <Sidebar />
         </div>
 
         {/* CONTENT */}
