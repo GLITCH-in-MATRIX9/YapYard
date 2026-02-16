@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
-import dbConnect from "../../../lib/dbConnect";
+import dbConnect from "../../../../lib/dbConnect";
 import User from "@/models/User";
-import { getUserFromToken } from "@/lib/auth";
+import { getUserFromToken } from "../../../../lib/auth";
 
 export async function PUT(req: Request) {
   try {
