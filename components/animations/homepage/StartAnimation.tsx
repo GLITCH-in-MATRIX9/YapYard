@@ -174,4 +174,4 @@ const StartAnimation = ({ onFinish }: { onFinish?: () => void }) => {
 
 export default StartAnimation;
 
-const delay = (ms: number) => new Promise((res) => setTimeout(res, ms));
+const delay = (ms: number) => new Promise((res) => setTimeout(res, ms));//
